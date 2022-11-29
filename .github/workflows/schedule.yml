@@ -1,7 +1,8 @@
+name: Excavator
+
 on:
   schedule:
-    - cron: '*/0 * * * *'
-name: Excavator
+    - cron: '0 4 * * *'
 jobs:
   excavate:
     name: Excavator
