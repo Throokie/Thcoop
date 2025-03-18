@@ -5,23 +5,10 @@
     "url": "https://www.yingdev.com/Content/Projects/WGestures/Release/1.8.5.0/Install%20WGestures%201.8.5.0.zip",
     "hash": "8bb3a27a86cc0342a0c0922e39907cefdfb7de7d90b55be282641c0cd1bc5160",
     "installer": {
-        "script": [
-            "$msiPath = \"$dir\\Install WGestures.msi\"",
-            "if (!(Test-Path $msiPath)) { throw \"安装文件不存在：$msiPath\" }",
-            "Start-Process msiexec -ArgumentList @('/i', \"$msiPath\", '/qn', \"TARGETDIR=$dir\", \"INSTALLDIR=$dir\", '/norestart') -Wait -Verb RunAs -PassThru | ForEach-Object {",
-            "    if ($_.ExitCode -ne 0 -and $_.ExitCode -ne 3010) { throw \"安装失败，错误代码：$($_.ExitCode)\" }",
-            "}"
-        ]
+        "script": "Start-Process -Wait msiexec \"/i `\"$dir\\Install WGestures.msi`\" /qn TARGETDIR=`\"$dir`\" INSTALLDIR=\"`$dir`\" -Verb RunAs"
     },
     "uninstaller": {
-        "script": [
-            "$msiPath = \"$dir\\Install WGestures.msi\"",
-            "if (Test-Path $msiPath) {",
-            "    Start-Process msiexec -ArgumentList @('/x', \"$msiPath\", '/qn', '/norestart') -Wait -Verb RunAs -PassThru | ForEach-Object {",
-            "        if ($_.ExitCode -ne 0 -and $_.ExitCode -ne 3010) { throw \"卸载失败，错误代码：$($_.ExitCode)\" }",
-            "    }",
-            "}"
-        ]
+        "script": "Invoke-ExternalCommand msiexec -ArgumentList @('/x', \"$dir\\Install WGestures.msi\", '/qn') -RunAs | Out-Null"
     },
     "bin": "WGestures.exe",
     "shortcuts": [
