@@ -1,24 +1,37 @@
 {
+    "name": "wgestures",
+    "version": "1.8.5.0",
+    "description": "手势控制工具，支持自定义手势操作",
     "homepage": "https://www.yingdev.com/projects/wgestures",
     "license": "GPL-2.0-or-later",
-    "version": "1.8.5.0",
     "url": "https://www.yingdev.com/Content/Projects/WGestures/Release/1.8.5.0/Install%20WGestures%201.8.5.0.zip",
     "hash": "8bb3a27a86cc0342a0c0922e39907cefdfb7de7d90b55be282641c0cd1bc5160",
     "installer": {
-        "script": "Start-Process -Wait msiexec \"/i `\"$dir\\Install WGestures.msi`\" /qn TARGETDIR=`\"$dir`\" INSTALLDIR=\"`$dir`\" -Verb RunAs"
+        "script": [
+            "Get-ChildItem \"$dir\\Install WGestures*.msi\" | Select-Object -First 1 | ForEach-Object {",
+            "    Start-Process msiexec -ArgumentList \"/i\", \"`\"$($_.FullName)`\"\", \"/qn\", \"REBOOT=ReallySuppress\", \"TARGETDIR=`\"$dir`\"\" -Wait -Verb RunAs",
+            "}"
+        ]
     },
     "uninstaller": {
-        "script": "Invoke-ExternalCommand msiexec -ArgumentList @('/x', \"$dir\\Install WGestures.msi\", '/qn') -RunAs | Out-Null"
+        "script": [
+            "Get-ChildItem \"$dir\\Install WGestures*.msi\" | Select-Object -First 1 | ForEach-Object {",
+            "    Start-Process msiexec -ArgumentList \"/x\", \"`\"$($_.FullName)`\"\", \"/qn\" -Wait -Verb RunAs",
+            "}"
+        ]
+    },
+    "autoupdate": {
+        "url": "https://www.yingdev.com/Content/Projects/WGestures/Release/$version/Install%20WGestures%20$version.zip",
+        "hash": {
+            "url": "$url.sha256"
+        }
     },
     "bin": "WGestures.exe",
     "shortcuts": [
-        [
-            "WGestures.exe",
-            "WGestures"
-        ]
+        ["WGestures.exe", "WGestures"]
     ],
-    "checkver": "当前版本: <span>([\\d.]+)</span>",
-    "autoupdate": {
-        "url": "https://www.yingdev.com/Content/Projects/WGestures/Release/$version/Install%20WGestures%20$version.zip"
+    "checkver": {
+        "url": "https://www.yingdev.com/projects/wgestures",
+        "regex": "当前版本: <span>([\\d.]+)</span>"
     }
 }
